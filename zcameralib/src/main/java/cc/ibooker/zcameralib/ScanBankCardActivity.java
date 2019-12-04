@@ -48,6 +48,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private int scanCropBgRes;
     // 主题
     private String title;
+    // 提示
+    private String tip;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
 
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
         title = getIntent().getStringExtra("title");
+        tip = getIntent().getStringExtra("tip");
+
         initView();
     }
 
@@ -81,6 +85,9 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         TextView titleTv = findViewById(R.id.tv_title);
         if (!TextUtils.isEmpty(title))
             titleTv.setText(title);
+        TextView tipTv = findViewById(R.id.tv_tip);
+        if (!TextUtils.isEmpty(tip))
+            tipTv.setText(tip);
         cameraScanContainerLl = findViewById(R.id.ll_camera_scan_container);
         cameraScanCropFl = findViewById(R.id.fl_camera_scan_crop);
         if (scanCropBgRes != 0)
