@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -45,6 +46,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private ProgressDialog progressDialog;
     // 扫描裁剪框背景
     private int scanCropBgRes;
+    // 主题
+    private String title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.zcamera_activity_scan_bankcard);
 
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
+        title = getIntent().getStringExtra("title");
         initView();
     }
 
@@ -74,6 +78,9 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private void initView() {
         TextView backTv = findViewById(R.id.tv_back);
         backTv.setOnClickListener(this);
+        TextView titleTv = findViewById(R.id.tv_title);
+        if (!TextUtils.isEmpty(title))
+            titleTv.setText(title);
         cameraScanContainerLl = findViewById(R.id.ll_camera_scan_container);
         cameraScanCropFl = findViewById(R.id.fl_camera_scan_crop);
         if (scanCropBgRes != 0)

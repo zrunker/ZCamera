@@ -31,11 +31,15 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="14dp"
                 android:layout_marginLeft="14dp"
+                android:drawableStart="@drawable/ic_chevron_left_ffffff_24dp"
+                android:drawableLeft="@drawable/ic_chevron_left_ffffff_24dp"
+                android:gravity="center_vertical"
                 android:text="返回"
                 android:textColor="#FFF"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
