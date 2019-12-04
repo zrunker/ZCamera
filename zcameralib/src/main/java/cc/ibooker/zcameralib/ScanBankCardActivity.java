@@ -43,12 +43,15 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private ExecutorService executorService;
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
+    // 扫描裁剪框背景
+    private int scanCropBgRes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zcamera_activity_scan_bankcard);
 
+        scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
         initView();
     }
 
@@ -73,6 +76,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         backTv.setOnClickListener(this);
         cameraScanContainerLl = findViewById(R.id.ll_camera_scan_container);
         cameraScanCropFl = findViewById(R.id.fl_camera_scan_crop);
+        if (scanCropBgRes != 0)
+            cameraScanCropFl.setBackgroundResource(scanCropBgRes);
         ImageView takePicIv = findViewById(R.id.iv_takepic);
         takePicIv.setOnClickListener(this);
         cameraScanView = findViewById(R.id.csview);
