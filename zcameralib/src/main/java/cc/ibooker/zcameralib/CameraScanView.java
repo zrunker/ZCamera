@@ -1,9 +1,13 @@
 package cc.ibooker.zcameralib;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -23,6 +27,7 @@ public class CameraScanView extends SurfaceView
         implements SurfaceHolder.Callback,
         Camera.AutoFocusCallback,
         Camera.ErrorCallback {
+    private final int CAMERA_REQUEST_CODE = 2222;
     private Context mContext;
     private Camera mCamera;
     private SurfaceHolder mHolder;
@@ -31,6 +36,11 @@ public class CameraScanView extends SurfaceView
     private int mDisplayOrientation;
     // 是否正在聚焦 - 防止频繁对焦
     private boolean isFoucing = false;
+    // 需要申请的权限
+    private String[] needPermissions = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     public CameraScanView(Context context) {
         this(context, null);
@@ -42,6 +52,7 @@ public class CameraScanView extends SurfaceView
 
     public CameraScanView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        requestPermissions();
         init(context);
     }
 
@@ -52,6 +63,7 @@ public class CameraScanView extends SurfaceView
         this.mHolder.addCallback(this);
         // 设置类型
         this.mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        this.mHolder.setKeepScreenOn(true);
         this.mDisplayOrientation = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
     }
 
@@ -330,6 +342,36 @@ public class CameraScanView extends SurfaceView
     // 获取相机图片分辨率
     public Camera.Size getCameraResolution() {
         return pictureSize;
+    }
+
+    /**
+     * 权限检查方法，false代表没有该权限，ture代表有该权限
+     */
+    public boolean hasPermission(String... permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 申请权限
+     */
+    public void requestPermissions() {
+        if (!hasPermission(needPermissions))
+            ActivityCompat.requestPermissions((Activity) getContext(), needPermissions, CAMERA_REQUEST_CODE);
+    }
+
+    // 获取权限请求码
+    public int getCameraRequestCode() {
+        return CAMERA_REQUEST_CODE;
+    }
+
+    // 获取拍照所需权限组
+    public String[] getNeedPermissions() {
+        return needPermissions;
     }
 
     // 拍照回调

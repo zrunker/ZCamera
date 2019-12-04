@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -262,6 +264,17 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                 intent.putExtra("filePath", (String) msg.obj);
                 currentActivity.setResult(RESULT_OK, intent);
                 currentActivity.finish();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == cameraScanView.getCameraRequestCode()) {
+            if (!cameraScanView.hasPermission(cameraScanView.getNeedPermissions())) {
+                Toast.makeText(ScanBankCardActivity.this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
