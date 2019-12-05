@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.zrunker:ZCamera:v1.0'
+    implementation 'com.github.zrunker:ZCamera:v1.0.1'
 }
 ```
 
@@ -28,7 +28,7 @@ dependencies {
 	<dependency>
 	    <groupId>com.github.zrunker</groupId>
 	    <artifactId>ZCamera</artifactId>
-	    <version>Tag</version>
+	    <version>v1.0.1</version>
 	</dependency>
 ```
 
