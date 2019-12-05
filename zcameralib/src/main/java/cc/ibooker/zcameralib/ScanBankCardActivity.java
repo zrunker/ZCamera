@@ -139,11 +139,18 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 
                                     // 保存图片路径
-                                    String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ibooker" + File.separator + System.currentTimeMillis() + ".JPEG";
-                                    file = new File(filePath);
-                                    boolean bool = false;
-                                    if (!file.exists())
-                                        bool = file.createNewFile();
+                                    String targetSDPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ibooker" + File.separator;
+                                    File targetFile = new File(targetSDPath);
+                                    boolean bool = targetFile.exists();
+                                    if (!bool)
+                                        bool = targetFile.mkdirs();
+                                    if (bool) {
+                                        String filePath = targetSDPath + System.currentTimeMillis() + ".JPEG";
+                                        file = new File(filePath);
+                                        bool = file.exists();
+                                        if (!bool)
+                                            bool = file.createNewFile();
+                                    }
                                     if (bool) {
                                         bos = new BufferedOutputStream(new FileOutputStream(file));
 //                                        // 缩放
@@ -184,7 +191,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                         // 切换主线程
                         Message message = myHandler.obtainMessage();
                         message.what = ONJPEGPICTURETAKEN_CODE;
-                        if (file != null)
+                        if (file != null && file.exists())
                             message.obj = file.getAbsolutePath();
                         myHandler.sendMessage(message);
                     }
@@ -280,8 +287,10 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             super.handleMessage(msg);
             ScanBankCardActivity currentActivity = mWeakRef.get();
             if (msg.what == currentActivity.ONJPEGPICTURETAKEN_CODE) {
+                String filePath = (String) msg.obj;
                 Intent intent = new Intent();
-                intent.putExtra("filePath", (String) msg.obj);
+                intent.putExtra("filePath", filePath);
+                intent.putExtra("message", TextUtils.isEmpty(filePath) ? "拍照失败！" : "success");
                 currentActivity.setResult(RESULT_OK, intent);
                 currentActivity.finish();
             }
