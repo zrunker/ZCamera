@@ -147,8 +147,10 @@ public class CameraScanView extends SurfaceView
             params.setPreviewSize(preW, preH);
 
             // 其他设置
-            params.setPictureFormat(ImageFormat.JPEG);
-//            // 部分手机不支持预览图片格式
+            List<Integer> picFormats = params.getSupportedPictureFormats();
+            if (picFormats.contains(ImageFormat.JPEG))
+                params.setPictureFormat(ImageFormat.JPEG);
+//            // 部分手机不支持预览JPEG图片格式
 //            params.setPreviewFormat(ImageFormat.JPEG);
 //            // 不设置属性旋转
 //            params.setRotation(mCameraOrientation);
