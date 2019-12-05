@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.zrunker:ZCamera:v1.0.1'
+    implementation 'com.github.zrunker:ZCamera:v1.0.2'
 }
 ```
 
@@ -28,8 +28,15 @@ dependencies {
 	<dependency>
 	    <groupId>com.github.zrunker</groupId>
 	    <artifactId>ZCamera</artifactId>
-	    <version>v1.0.1</version>
+	    <version>v1.0.2</version>
 	</dependency>
+```
+3. 直接下载工程文件：
+在build.gradle中引入组件：
+```
+dependencies {
+    implementation project(':zcameralib')
+}
 ```
 
 ### 二、使用（推荐）：
