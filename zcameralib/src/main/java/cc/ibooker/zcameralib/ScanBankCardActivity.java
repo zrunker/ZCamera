@@ -62,9 +62,6 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         tip = getIntent().getStringExtra("tip");
 
         initView();
-
-        // 请求权限
-        cameraScanView.requestPermissions();
     }
 
     @Override
@@ -298,8 +295,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             if (!cameraScanView.hasPermission(cameraScanView.getNeedPermissions())) {
                 Toast.makeText(ScanBankCardActivity.this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
                 finish();
-            } else
-                cameraScanView.setCameraParams();
+            } else cameraScanView.invalidate();
         }
     }
 }

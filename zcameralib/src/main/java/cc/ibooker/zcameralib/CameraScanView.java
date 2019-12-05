@@ -57,6 +57,7 @@ public class CameraScanView extends SurfaceView
     public CameraScanView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        requestPermissions();
         init(context);
     }
 
@@ -78,8 +79,6 @@ public class CameraScanView extends SurfaceView
             // 开启相机 0-后置摄像头，1-前置摄像头
             mCamera = Camera.open(mCameraId);
 
-            // 设置对焦监听
-            mCamera.autoFocus(this);
             // 设置错误监听
             mCamera.setErrorCallback(this);
 
@@ -100,6 +99,8 @@ public class CameraScanView extends SurfaceView
         setCameraParams();
         // 开始预览
         mCamera.startPreview();
+        // 设置对焦监听 - 聚焦应在开始预览之后
+        mCamera.autoFocus(this);
     }
 
     // 布局销毁
@@ -115,7 +116,7 @@ public class CameraScanView extends SurfaceView
     }
 
     // 设置相机属性
-    void setCameraParams() {
+    private void setCameraParams() {
         if (mCamera != null) {
             // 设置相机相关参数
             Camera.Parameters params = mCamera.getParameters();
