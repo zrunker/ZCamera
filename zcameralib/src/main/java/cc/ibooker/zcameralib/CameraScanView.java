@@ -30,7 +30,7 @@ public class CameraScanView extends SurfaceView
         Camera.AutoFocusCallback,
         Camera.ErrorCallback {
     private final int CAMERA_REQUEST_CODE = 2222;
-    private int mCameraId = 0;
+    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private Context mContext;
     private Camera mCamera;
     private SurfaceHolder mHolder;
@@ -78,7 +78,9 @@ public class CameraScanView extends SurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (mCamera == null) {
-            // 开启相机 0-后置摄像头，1-前置摄像头
+            // 开启相机
+            // 0-后置摄像头-Camera.CameraInfo.CAMERA_FACING_BACK
+            // 1-前置摄像头-Camera.CameraInfo.CAMERA_FACING_FRONT
             mCamera = Camera.open(mCameraId);
 
             // 设置错误监听
