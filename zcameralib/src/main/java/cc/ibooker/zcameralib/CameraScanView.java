@@ -35,6 +35,7 @@ public class CameraScanView extends SurfaceView
     private Camera mCamera;
     private SurfaceHolder mHolder;
     private Camera.Size pictureSize, preViewSize;
+    private int mScreenWidth, mScreenHeight;
     // 屏幕旋转显示角度
     private int mDisplayOrientation;
     // 相机旋转角度
@@ -265,7 +266,9 @@ public class CameraScanView extends SurfaceView
         WindowManager wM = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wM.getDefaultDisplay().getMetrics(outMetrics);
-        return new float[]{outMetrics.widthPixels, outMetrics.heightPixels, (float) outMetrics.widthPixels / outMetrics.heightPixels};
+        mScreenHeight = outMetrics.heightPixels;
+        mScreenWidth = outMetrics.widthPixels;
+        return new float[]{mScreenWidth, mScreenHeight, (float) outMetrics.widthPixels / outMetrics.heightPixels};
     }
 
     // 开启相机

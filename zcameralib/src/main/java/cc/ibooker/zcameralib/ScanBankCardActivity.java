@@ -154,7 +154,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                                     if (bool) {
                                         bos = new BufferedOutputStream(new FileOutputStream(file));
 //                                        // 缩放
-//                                        Bitmap sizeBitmap = Bitmap.createScaledBitmap(tempBm,
+//                                        bitmap = Bitmap.createScaledBitmap(bitmap,
 //                                                cameraScanContainerLl.getWidth(), cameraScanContainerLl.getHeight(), true);
                                         // 截取
                                         Rect rect = getCropRect();
@@ -220,33 +220,63 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         int cameraWidth = cameraScanView.getCameraResolution().height;
         int cameraHeight = cameraScanView.getCameraResolution().width;
 
-        /** 获取布局中扫描框的位置信息 */
+        // 获取布局中扫描框的位置信息
         int[] location = new int[2];
         cameraScanCropFl.getLocationInWindow(location);
 
         int cropLeft = location[0];
         int cropTop = location[1] - getStatusBarHeight();
 
+        // 裁剪区域的宽高
         int cropWidth = cameraScanCropFl.getWidth();
         int cropHeight = cameraScanCropFl.getHeight();
 
-        /** 获取布局容器的宽高 */
+        // 获取布局容器的宽高
         int containerWidth = cameraScanContainerLl.getWidth();
         int containerHeight = cameraScanContainerLl.getHeight();
 
-        /** 计算最终截取的矩形的左上角顶点x坐标 */
-        int x = cropLeft * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的左上角顶点y坐标 */
-        int y = cropTop * cameraHeight / containerHeight;
+        float dw = (float) cameraWidth / containerWidth;
+        float dh = (float) cameraHeight / containerHeight;
 
-        /** 计算最终截取的矩形的宽度 */
-        int width = cropWidth * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的高度 */
-        int height = cropHeight * cameraHeight / containerHeight;
+//        // 宽度偏移量 - 适应曲面屏
+//        int widthOffset = 0;
+//        int widthDiff = cameraWidth - containerWidth;
+//        if (widthDiff > 0)
+//            widthOffset = cameraScanCropFl.getLeft() / 2;
+//        if (widthOffset > widthDiff / 2)
+//            widthOffset = 0;
+        // 计算最终截取的矩形的左上角顶点x坐标
+        int x = (int) (cropLeft * dw);
+        // 计算最终截取的矩形的左上角顶点y坐标
+        int y = (int) (cropTop * dh);
 
-        /** 生成最终的截取的矩形 */
+        // 计算最终截取的矩形的宽度
+        int width = (int) (cropWidth * dw);
+        // 计算最终截取的矩形的高度
+        int height = (int) (cropHeight * dh);
+
+        // 生成最终的截取的矩形
         return new Rect(x, y, width + x, height + y);
     }
+
+//    /**
+//     * 初始化截取的矩形区域 - 方案二
+//     */
+//    private Rect getCropRect() {
+//        /** 获取布局中扫描框的位置信息 */
+//        int[] location = new int[2];
+//        cameraScanCropFl.getLocationInWindow(location);
+//
+//        int cropLeft = location[0];
+//        int cropTop = location[1] - getStatusBarHeight();
+//
+//        // 裁剪区域的宽高
+//        int cropWidth = cameraScanCropFl.getWidth();
+//        int cropHeight = cameraScanCropFl.getHeight();
+//
+//        /** 生成最终的截取的矩形 */
+//        return new Rect(cropLeft, cropTop, cropWidth + cropLeft, cropHeight + cropTop);
+//    }
 
     // 获取状态栏高度
     private int getStatusBarHeight() {

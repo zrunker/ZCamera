@@ -12,6 +12,9 @@
         android:required="false" />
 
     <application>
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
 
         <activity
             android:name=".ScanBankCardActivity"
