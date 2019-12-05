@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -61,6 +62,9 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         tip = getIntent().getStringExtra("tip");
 
         initView();
+
+        // 请求权限
+        cameraScanView.requestPermissions();
     }
 
     @Override
@@ -129,13 +133,13 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                                 // 将tempBm写入文件
                                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-//                                    // 默认拍照之后图片为横屏 - 旋转90
-//                                    Matrix matrix = new Matrix();
-//                                    int height = bitmap.getHeight();
-//                                    int width = bitmap.getWidth();
-//                                    matrix.setRotate(90);
-//                                    // 旋转后的图片
-//                                    Bitmap tempBm = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+                                    // 默认拍照之后图片为横屏 - 旋转90
+                                    Matrix matrix = new Matrix();
+                                    int height = bitmap.getHeight();
+                                    int width = bitmap.getWidth();
+                                    matrix.setRotate(cameraScanView.getCameraOrientation());
+                                    // 旋转后的图片
+                                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 
                                     // 保存图片路径
                                     String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ibooker" + File.separator + System.currentTimeMillis() + ".JPEG";
@@ -294,7 +298,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             if (!cameraScanView.hasPermission(cameraScanView.getNeedPermissions())) {
                 Toast.makeText(ScanBankCardActivity.this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
                 finish();
-            }
+            } else
+                cameraScanView.setCameraParams();
         }
     }
 }

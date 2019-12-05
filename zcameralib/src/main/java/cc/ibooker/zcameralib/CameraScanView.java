@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -28,12 +29,15 @@ public class CameraScanView extends SurfaceView
         Camera.AutoFocusCallback,
         Camera.ErrorCallback {
     private final int CAMERA_REQUEST_CODE = 2222;
+    private int mCameraId = 0;
     private Context mContext;
     private Camera mCamera;
     private SurfaceHolder mHolder;
     private Camera.Size pictureSize, preViewSize;
     // 屏幕旋转显示角度
     private int mDisplayOrientation;
+    // 相机旋转角度
+    private int mCameraOrientation;
     // 是否正在聚焦 - 防止频繁对焦
     private boolean isFoucing = false;
     // 需要申请的权限
@@ -52,7 +56,7 @@ public class CameraScanView extends SurfaceView
 
     public CameraScanView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        requestPermissions();
+
         init(context);
     }
 
@@ -71,8 +75,8 @@ public class CameraScanView extends SurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (mCamera == null) {
-            // 开启相机 0-后置摄像图
-            mCamera = Camera.open(0);
+            // 开启相机 0-后置摄像头，1-前置摄像头
+            mCamera = Camera.open(mCameraId);
 
             // 设置对焦监听
             mCamera.autoFocus(this);
@@ -111,7 +115,7 @@ public class CameraScanView extends SurfaceView
     }
 
     // 设置相机属性
-    private void setCameraParams() {
+    void setCameraParams() {
         if (mCamera != null) {
             // 设置相机相关参数
             Camera.Parameters params = mCamera.getParameters();
@@ -139,8 +143,10 @@ public class CameraScanView extends SurfaceView
 
             // 其他设置
             params.setPictureFormat(ImageFormat.JPEG);
-            params.setPreviewFormat(ImageFormat.JPEG);
-            params.setRotation(90);
+//            // 部分手机不支持预览图片格式
+//            params.setPreviewFormat(ImageFormat.JPEG);
+//            // 不设置属性旋转
+//            params.setRotation(mCameraOrientation);
             // 设置图片质量
             params.setJpegQuality(100);
             // 设置连续对焦
@@ -151,7 +157,8 @@ public class CameraScanView extends SurfaceView
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             mCamera.setParameters(params);
             // 设置预览方向 - 0, 90, 180, 270 默认摄像头是横拍
-            mCamera.setDisplayOrientation(90);
+            mCameraOrientation = getCameraOri(mDisplayOrientation, mCameraId);
+            mCamera.setDisplayOrientation(mCameraOrientation);
         }
     }
 
@@ -239,6 +246,11 @@ public class CameraScanView extends SurfaceView
             }
         }
         return result;
+    }
+
+    // 获取相机旋转角度
+    public int getCameraOrientation() {
+        return mCameraOrientation;
     }
 
     // 当相机的倾斜度数为90/270时是横屏
@@ -342,6 +354,44 @@ public class CameraScanView extends SurfaceView
     // 获取相机图片分辨率
     public Camera.Size getCameraResolution() {
         return pictureSize;
+    }
+
+    /**
+     * 获取相机的旋转角度
+     *
+     * @param rotation 屏幕的旋转角度
+     * @param cameraId 相机ID
+     */
+    private int getCameraOri(int rotation, int cameraId) {
+        int degrees = rotation * 90;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+            default:
+                break;
+        }
+
+        // result 即为在camera.setDisplayOrientation(int)的参数
+        int result;
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;
+        } else {
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        return result;
     }
 
     /**
