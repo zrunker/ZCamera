@@ -19,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onEnterCamera(View view) {
         Intent intent = new Intent(this, ScanBankCardActivity.class);
+        // 扫描裁剪框背景
+        intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_87000000_2_5_h_fa3a00_2_c_10_a);
+        // 主题
+        intent.putExtra("title", "扫描银行卡正面");
+        // 提示
+        intent.putExtra("tip", "将银行卡卡号面放在此区域，扫描卡片");
         startActivityForResult(intent, 111);
     }
 
