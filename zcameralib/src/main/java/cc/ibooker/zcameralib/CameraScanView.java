@@ -101,7 +101,7 @@ public class CameraScanView extends SurfaceView
         setCameraParams();
         // 开始预览
         mCamera.startPreview();
-        // 设置对焦监听 - 聚焦应在开始预览之后
+        // 设置对焦监听 - 聚焦应在开始预览之后（否则在部分机型上会报错 - 华为）
         mCamera.autoFocus(this);
     }
 
