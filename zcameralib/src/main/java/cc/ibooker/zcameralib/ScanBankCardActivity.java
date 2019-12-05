@@ -51,6 +51,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private String title;
     // 提示
     private String tip;
+    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
         title = getIntent().getStringExtra("title");
         tip = getIntent().getStringExtra("tip");
+        intent = getIntent();
 
         initView();
     }
@@ -295,7 +297,10 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             if (!cameraScanView.hasPermission(cameraScanView.getNeedPermissions())) {
                 Toast.makeText(ScanBankCardActivity.this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
                 finish();
-            } else cameraScanView.invalidate();
+            } else {
+                // 重新渲染页面
+                recreate();
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -270,7 +271,12 @@ public class CameraScanView extends SurfaceView
     // 开启相机
     public void takePicture() {
 //        setCameraParams();
-        mCamera.takePicture(shutter, raw, jpeg);
+        if (mCamera != null)
+            mCamera.takePicture(shutter, raw, jpeg);
+        else {
+            Toast.makeText(mContext, "拍照失败！", Toast.LENGTH_SHORT).show();
+            ((Activity) mContext).finish();
+        }
     }
 
     // 拍照瞬间调用
@@ -306,7 +312,8 @@ public class CameraScanView extends SurfaceView
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!isFoucing) {
                 isFoucing = true;
-                mCamera.autoFocus(this);
+                if (mCamera != null)
+                    mCamera.autoFocus(this);
             }
         }
         return super.onTouchEvent(event);
