@@ -51,7 +51,6 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private String title;
     // 提示
     private String tip;
-    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +60,6 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
         title = getIntent().getStringExtra("title");
         tip = getIntent().getStringExtra("tip");
-        intent = getIntent();
 
         initView();
     }
