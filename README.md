@@ -58,3 +58,5 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     }
 }
 ```
+### 最终效果图：
+![扫描银行卡效果图](https://github.com/zrunker/ZCamera/blob/master/device-2019-12-05-103721.png)
