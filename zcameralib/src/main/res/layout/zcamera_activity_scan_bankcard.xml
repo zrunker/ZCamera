@@ -18,9 +18,10 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/rl_title"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:background="#CC000000">
+            android:background="@color/zcamera_cc000000">
 
             <TextView
                 android:id="@+id/tv_back"
@@ -57,9 +58,10 @@
             android:orientation="vertical">
 
             <View
+                android:id="@+id/view_top"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="#CC000000" />
+                android:background="@color/zcamera_cc000000" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -67,10 +69,11 @@
                 android:orientation="horizontal">
 
                 <View
+                    android:id="@+id/view_left"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:background="#CC000000" />
+                    android:background="@color/zcamera_cc000000" />
 
                 <FrameLayout
                     android:id="@+id/fl_camera_scan_crop"
@@ -81,10 +84,11 @@
                     android:background="@drawable/zcamera_bg_layerl_h_87000000_2_5_h_fa3a00_2_c_10_a" />
 
                 <View
+                    android:id="@+id/view_right"
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
-                    android:background="#CC000000" />
+                    android:background="@color/zcamera_cc000000" />
 
             </FrameLayout>
 
@@ -92,7 +96,7 @@
                 android:id="@+id/tv_tip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#CC000000"
+                android:background="@color/zcamera_cc000000"
                 android:gravity="center_horizontal"
                 android:paddingTop="20dp"
                 android:text="将银行卡卡号面放在此区域，扫描卡片"

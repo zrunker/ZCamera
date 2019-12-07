@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +52,15 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     private String title;
     // 提示
     private String tip;
+    // 页面背景颜色
+    private int decorViewBgRes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zcamera_activity_scan_bankcard);
 
+        decorViewBgRes = getIntent().getIntExtra("decorViewBgRes", R.color.zcamera_cc000000);
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
         title = getIntent().getStringExtra("title");
         tip = getIntent().getStringExtra("tip");
@@ -81,6 +85,14 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
 
     // 初始化控件
     private void initView() {
+        RelativeLayout titleRl = findViewById(R.id.rl_title);
+        titleRl.setBackgroundResource(decorViewBgRes);
+        View topView = findViewById(R.id.view_top);
+        topView.setBackgroundResource(decorViewBgRes);
+        View leftView = findViewById(R.id.view_left);
+        leftView.setBackgroundResource(decorViewBgRes);
+        View rightView = findViewById(R.id.view_right);
+        rightView.setBackgroundResource(decorViewBgRes);
         TextView backTv = findViewById(R.id.tv_back);
         backTv.setOnClickListener(this);
         TextView titleTv = findViewById(R.id.tv_title);
@@ -89,6 +101,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         TextView tipTv = findViewById(R.id.tv_tip);
         if (!TextUtils.isEmpty(tip))
             tipTv.setText(tip);
+        tipTv.setBackgroundResource(decorViewBgRes);
         cameraScanContainerLl = findViewById(R.id.ll_camera_scan_container);
         cameraScanCropFl = findViewById(R.id.fl_camera_scan_crop);
         if (scanCropBgRes != 0)
