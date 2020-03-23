@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == 111 && data != null) {
                 String filePath = data.getStringExtra("filePath");
                 Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
+            } else if (requestCode == 112 && data != null) {
+                String filePath = data.getStringExtra("filePath");
+                Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
             }
         }
     }
