@@ -123,22 +123,22 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onJpegPictureTaken(final byte[] data, Camera camera) {
-                if (progressDialog == null) {
-                    progressDialog = new ProgressDialog(ScanBankCardActivity.this);
-                    progressDialog.setMessage("图片处理中...");
-                    progressDialog.show();
-                }
-                if (myHandler == null)
-                    myHandler = new MyHandler(ScanBankCardActivity.this);
-                // 将字节流写成文件 - 推荐 - 子线程
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File file = null;
-                        BufferedOutputStream bos = null;
-                        Bitmap bitmap = null;
-                        try {
-                            if (data != null) {
+                if (data != null) {
+                    if (progressDialog == null) {
+                        progressDialog = new ProgressDialog(ScanBankCardActivity.this);
+                        progressDialog.setMessage("图片处理中...");
+                        progressDialog.show();
+                    }
+                    if (myHandler == null)
+                        myHandler = new MyHandler(ScanBankCardActivity.this);
+                    // 将字节流写成文件 - 推荐 - 子线程
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            File file = null;
+                            BufferedOutputStream bos = null;
+                            Bitmap bitmap = null;
+                            try {
                                 bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                                 // 将tempBm写入文件
                                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -180,38 +180,38 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                                     }
                                 }
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            if (bos != null) {
-                                try {
-                                    bos.flush();// 输出
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (bos != null) {
+                                    try {
+                                        bos.flush();// 输出
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            if (bos != null) {
-                                try {
-                                    bos.close();// 关闭
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                if (bos != null) {
+                                    try {
+                                        bos.close();// 关闭
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+                                if (bitmap != null)
+                                    bitmap.recycle();// 回收bitmap空间
                             }
-                            if (bitmap != null)
-                                bitmap.recycle();// 回收bitmap空间
+                            // 切换主线程
+                            Message message = myHandler.obtainMessage();
+                            message.what = ONJPEGPICTURETAKEN_CODE;
+                            if (file != null && file.exists())
+                                message.obj = file.getAbsolutePath();
+                            myHandler.sendMessage(message);
                         }
-                        // 切换主线程
-                        Message message = myHandler.obtainMessage();
-                        message.what = ONJPEGPICTURETAKEN_CODE;
-                        if (file != null && file.exists())
-                            message.obj = file.getAbsolutePath();
-                        myHandler.sendMessage(message);
-                    }
-                });
-                if (executorService == null)
-                    executorService = Executors.newSingleThreadExecutor();
-                executorService.execute(thread);
+                    });
+                    if (executorService == null)
+                        executorService = Executors.newSingleThreadExecutor();
+                    executorService.execute(thread);
+                }
             }
 
             @Override
