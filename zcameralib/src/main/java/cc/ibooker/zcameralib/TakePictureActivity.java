@@ -8,11 +8,13 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
@@ -28,7 +30,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     private ImageView ivPreview, ivArrowDown, ivTakepic, ivRotate;
     private TextView tvComplete;
     private Bitmap bitmap;
-    private int currentRotate = -90;
+    private final int currentRotate = -90;
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
@@ -79,6 +81,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     // 初始化View
     private void initView() {
         cameraView = findViewById(R.id.cameraView);
+        cameraView.requestPermissions();
         cameraView.setCameraTakePicListener(new CameraTakePicListener() {
             @Override
             public void onShutter() {
@@ -177,6 +180,20 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             matrix.setRotate(rotate);
             // 旋转后的图片
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == cameraView.getCameraRequestCode()) {
+            if (!cameraView.hasPermission(cameraView.getNeedPermissions())) {
+                Toast.makeText(this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                // 重新渲染页面
+                recreate();
+            }
         }
     }
 }
