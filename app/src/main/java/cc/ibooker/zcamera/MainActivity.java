@@ -8,16 +8,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import cc.ibooker.zcameralib.ScanBankCardActivity;
+import cc.ibooker.zcameralib.TakePictureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(cc.ibooker.zcamera.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
     }
 
-    public void onEnterCamera(View view) {
+    public void onEnterScan(View view) {
         Intent intent = new Intent(this, ScanBankCardActivity.class);
         // 扫描裁剪框背景
         intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_87000000_2_5_h_fa3a00_2_c_10_a);
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
         // 提示
         intent.putExtra("tip", "将银行卡卡号面放在此区域，扫描卡片");
         startActivityForResult(intent, 111);
+    }
+
+    public void onEnterCamera(View view) {
+        Intent intent = new Intent(this, TakePictureActivity.class);
+        startActivityForResult(intent, 112);
     }
 
     @Override

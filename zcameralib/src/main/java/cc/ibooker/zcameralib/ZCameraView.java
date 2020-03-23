@@ -17,7 +17,6 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ import java.util.List;
  *
  * @author 邹峰立
  */
-public class CameraScanView extends SurfaceView
+public class ZCameraView extends SurfaceView
         implements SurfaceHolder.Callback,
         Camera.AutoFocusCallback,
         Camera.ErrorCallback {
@@ -33,6 +32,7 @@ public class CameraScanView extends SurfaceView
     private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private Context mContext;
     private Camera mCamera;
+    private Camera.Parameters params;
     private SurfaceHolder mHolder;
     private Camera.Size pictureSize, preViewSize;
     private int mScreenWidth, mScreenHeight;
@@ -48,15 +48,15 @@ public class CameraScanView extends SurfaceView
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    public CameraScanView(Context context) {
+    public ZCameraView(Context context) {
         this(context, null);
     }
 
-    public CameraScanView(Context context, AttributeSet attrs) {
+    public ZCameraView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CameraScanView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ZCameraView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         requestPermissions();
@@ -72,6 +72,8 @@ public class CameraScanView extends SurfaceView
         this.mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         this.mHolder.setKeepScreenOn(true);
         this.mDisplayOrientation = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+        // 请求焦点
+        this.requestFocus();
     }
 
     // 布局创建
@@ -89,10 +91,11 @@ public class CameraScanView extends SurfaceView
             // 设置预览位置 - 摄像头画面显示在Surface上
             try {
                 mCamera.setPreviewDisplay(holder);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 mCamera.release();
                 mCamera = null;
+                onError(-1, mCamera);
             }
         }
     }
@@ -123,7 +126,7 @@ public class CameraScanView extends SurfaceView
     private void setCameraParams() {
         if (mCamera != null) {
             // 设置相机相关参数
-            Camera.Parameters params = mCamera.getParameters();
+            params = mCamera.getParameters();
 
             // 设置图片大小
 //            Camera.Size pictureSize = getPictureSize(params);
@@ -161,9 +164,9 @@ public class CameraScanView extends SurfaceView
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
             } else if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-            }
-            // 设置聚焦
-            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            } else
+                // 设置聚焦
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             mCamera.setParameters(params);
             // 设置预览方向 - 0, 90, 180, 270 默认摄像头是横拍
             mCameraOrientation = getCameraOri(mDisplayOrientation, mCameraId);
@@ -321,8 +324,18 @@ public class CameraScanView extends SurfaceView
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!isFoucing) {
                 isFoucing = true;
-                if (mCamera != null)
+                if (mCamera != null) {
+                    if (params == null)
+                        params = mCamera.getParameters();
+                    if (!params.getFocusMode().equals(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                        mCamera.setParameters(params);
+                    }
+                    // 开始预览
+                    mCamera.startPreview();
+                    // 自动对焦
                     mCamera.autoFocus(this);
+                }
             }
         }
         return super.onTouchEvent(event);
@@ -332,12 +345,26 @@ public class CameraScanView extends SurfaceView
     @Override
     public void onAutoFocus(boolean success, Camera camera) {
         isFoucing = false;
+        if (success && mCamera != null) {
+            if (params == null)
+                params = mCamera.getParameters();
+            if (params.getFocusMode().equals(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                // 设置连续对焦
+                if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                    mCamera.setParameters(params);
+                } else if (params.getSupportedFocusModes().contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                    mCamera.setParameters(params);
+                }
+            }
+        }
         if (cameraTakePicListener != null)
             cameraTakePicListener.onAutoFocus(success, camera);
     }
 
     // 开启闪光灯
-    public void turnOnFlash() {
+    public ZCameraView turnOnFlash() {
         if (mCamera != null) {
             try {
                 Camera.Parameters parameters = mCamera.getParameters();
@@ -347,10 +374,11 @@ public class CameraScanView extends SurfaceView
                 e.printStackTrace();
             }
         }
+        return this;
     }
 
     // 关闭闪光灯
-    public void turnOffFlash() {
+    public ZCameraView turnOffFlash() {
         if (mCamera != null) {
             try {
                 Camera.Parameters parameters = mCamera.getParameters();
@@ -360,6 +388,7 @@ public class CameraScanView extends SurfaceView
                 e.printStackTrace();
             }
         }
+        return this;
     }
 
     @Override

@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
  */
 public class ScanBankCardActivity extends AppCompatActivity implements View.OnClickListener {
     private final int ONJPEGPICTURETAKEN_CODE = 1111;
-    private CameraScanView cameraScanView;
+    private ZCameraView ZCameraView;
     private FrameLayout cameraScanCropFl;
     private LinearLayout cameraScanContainerLl;
     private ExecutorService executorService;
@@ -108,8 +108,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             cameraScanCropFl.setBackgroundResource(scanCropBgRes);
         ImageView takePicIv = findViewById(R.id.iv_takepic);
         takePicIv.setOnClickListener(this);
-        cameraScanView = findViewById(R.id.csview);
-        cameraScanView.setCameraTakePicListener(new CameraTakePicListener() {
+        ZCameraView = findViewById(R.id.csview);
+        ZCameraView.setCameraTakePicListener(new CameraTakePicListener() {
 
             @Override
             public void onShutter() {
@@ -147,7 +147,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
                                     Matrix matrix = new Matrix();
                                     int height = bitmap.getHeight();
                                     int width = bitmap.getWidth();
-                                    matrix.setRotate(cameraScanView.getCameraOrientation());
+                                    matrix.setRotate(ZCameraView.getCameraOrientation());
                                     // 旋转后的图片
                                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 
@@ -230,8 +230,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
      * 初始化截取的矩形区域
      */
     private Rect getCropRect() {
-        int cameraWidth = cameraScanView.getCameraResolution().height;
-        int cameraHeight = cameraScanView.getCameraResolution().width;
+        int cameraWidth = ZCameraView.getCameraResolution().height;
+        int cameraHeight = ZCameraView.getCameraResolution().width;
 
         // 获取布局中扫描框的位置信息
         int[] location = new int[2];
@@ -313,7 +313,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
         if (i == R.id.tv_back) {// 返回
             finish();
         } else if (i == R.id.iv_takepic) {// 拍照
-            cameraScanView.takePicture();
+            ZCameraView.takePicture();
         }
     }
 
@@ -343,8 +343,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == cameraScanView.getCameraRequestCode()) {
-            if (!cameraScanView.hasPermission(cameraScanView.getNeedPermissions())) {
+        if (requestCode == ZCameraView.getCameraRequestCode()) {
+            if (!ZCameraView.hasPermission(ZCameraView.getNeedPermissions())) {
                 Toast.makeText(ScanBankCardActivity.this, "所需权限未授权！", Toast.LENGTH_SHORT).show();
                 finish();
             } else {

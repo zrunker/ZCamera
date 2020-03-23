@@ -19,5 +19,8 @@
         <activity
             android:name=".ScanBankCardActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".TakePictureActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
