@@ -84,17 +84,13 @@
             android:src="@mipmap/zcamera_icon_rotate_right" />
     </RelativeLayout>
 
-    <ImageView
+    <cc.ibooker.zcameralib.ScaleImageView
         android:id="@+id/iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/rl_oper"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
 
 </RelativeLayout>

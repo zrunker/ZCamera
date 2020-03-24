@@ -12,13 +12,12 @@
         android:layout_height="match_parent" />
 
     <!--重载区-->
-    <ImageView
+    <cc.ibooker.zcameralib.ScaleImageView
         android:id="@+id/iv_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:scaleType="fitXY"
         android:visibility="gone" />
 
     <LinearLayout

@@ -6,12 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -181,15 +179,10 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         if (i == R.id.iv_takepic) {// 拍照
             cameraView.takePicture();
         } else if (i == R.id.iv_rotate) {// 旋转
-//            ivRotate.setEnabled(false);
-//            rotateBitmap(currentRotate);
-//            ivPreview.setImageBitmap(bitmap);
-//            ivRotate.setEnabled(true);
-
-            Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
-            Intent intent = new Intent(this, RotatePictureActivity.class);
-            intent.setData(uri);
-            startActivityForResult(intent, 1112);
+            ivRotate.setEnabled(false);
+            rotateBitmap(currentRotate);
+            ivPreview.setImageBitmap(bitmap);
+            ivRotate.setEnabled(true);
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照
