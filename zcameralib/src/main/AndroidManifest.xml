@@ -18,12 +18,15 @@
 
         <activity
             android:name=".ScanBankCardActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TakePictureActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RotatePictureActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
     </application>
 </manifest>
