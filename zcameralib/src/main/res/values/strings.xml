@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ZCameraLib</string>
     <string name="zcamera_complete">完成</string>
+    <string name="zcamera_cancel">取消</string>
+    <string name="zcamera_reset">还原</string>
+    <string name="zcamera_ensure">确定</string>
 </resources>

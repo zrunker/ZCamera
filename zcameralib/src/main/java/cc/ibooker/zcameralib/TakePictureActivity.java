@@ -94,6 +94,11 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             myHandler.removeCallbacks(null);
             myHandler = null;
         }
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
+            System.gc();
+        }
     }
 
     // 初始化View
@@ -167,12 +172,15 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
+        if (ClickUtil.isFastClick()) return;
         int i = v.getId();
         if (i == R.id.iv_takepic) {// 拍照
             cameraView.takePicture();
         } else if (i == R.id.iv_rotate) {// 旋转
+            ivRotate.setEnabled(false);
             rotateBitmap(currentRotate);
             ivPreview.setImageBitmap(bitmap);
+            ivRotate.setEnabled(true);
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照
@@ -202,6 +210,12 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             matrix.setRotate(rotate);
             // 旋转后的图片
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+            try {
+                // 压缩图片 - 图片不能超过7M
+                bitmap = BitmapUtil.compressImageByQuality(bitmap, 7 * 1024);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

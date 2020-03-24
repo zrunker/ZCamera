@@ -22,5 +22,8 @@
         <activity
             android:name=".TakePictureActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".RotatePictureActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

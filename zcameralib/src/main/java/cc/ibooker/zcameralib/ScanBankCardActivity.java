@@ -310,6 +310,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     // 点击事件监听
     @Override
     public void onClick(View v) {
+        if (ClickUtil.isFastClick()) return;
         int i = v.getId();
         if (i == R.id.tv_back) {// 返回
             finish();
