@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +45,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
+    private String msg = "success";
 
     // 自定义Handler
     private static class MyHandler extends Handler {
@@ -66,7 +69,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                 String filePath = (String) msg.obj;
                 Intent intent = new Intent();
                 intent.putExtra("filePath", filePath);
-                intent.putExtra("message", TextUtils.isEmpty(filePath) ? "拍照失败！" : "success");
+                intent.putExtra("message", TextUtils.isEmpty(filePath) ? currentActivity.msg : "success");
                 currentActivity.setResult(RESULT_OK, intent);
                 currentActivity.finish();
             }
@@ -143,6 +146,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                         executorService = Executors.newSingleThreadExecutor();
                     executorService.execute(thread);
                 } else {
+                    msg = "拍照失败！";
                     Message message = myHandler.obtainMessage();
                     message.what = BITMAP_FILE_REQUEST_CODE;
                     myHandler.sendMessage(message);
@@ -177,10 +181,15 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         if (i == R.id.iv_takepic) {// 拍照
             cameraView.takePicture();
         } else if (i == R.id.iv_rotate) {// 旋转
-            ivRotate.setEnabled(false);
-            rotateBitmap(currentRotate);
-            ivPreview.setImageBitmap(bitmap);
-            ivRotate.setEnabled(true);
+//            ivRotate.setEnabled(false);
+//            rotateBitmap(currentRotate);
+//            ivPreview.setImageBitmap(bitmap);
+//            ivRotate.setEnabled(true);
+
+            Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+            Intent intent = new Intent(this, RotatePictureActivity.class);
+            intent.setData(uri);
+            startActivityForResult(intent, 1112);
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照
@@ -256,9 +265,11 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                                 // 将图片压缩到流中
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                             }
-                        }
+                        } else
+                            msg = "SD卡未找到！";
                     } catch (IOException e) {
                         e.printStackTrace();
+                        msg = e.getMessage();
                     } finally {
                         if (bos != null) {
                             try {
@@ -289,6 +300,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                 executorService = Executors.newSingleThreadExecutor();
             executorService.execute(thread);
         } else {
+            msg = "图片对象丢失！";
             Message message = myHandler.obtainMessage();
             message.what = BITMAP_FILE_REQUEST_CODE;
             myHandler.sendMessage(message);

@@ -41,6 +41,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
+    private String msg = "success";
 
     // 自定义Handler
     private static class MyHandler extends Handler {
@@ -58,7 +59,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                 String filePath = (String) msg.obj;
                 Intent intent = new Intent();
                 intent.putExtra("filePath", filePath);
-                intent.putExtra("message", TextUtils.isEmpty(filePath) ? "拍照失败！" : "success");
+                intent.putExtra("message", TextUtils.isEmpty(filePath) ? currentActivity.msg : "success");
                 currentActivity.setResult(RESULT_OK, intent);
                 currentActivity.finish();
             }
@@ -205,9 +206,11 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                                 // 将图片压缩到流中
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                             }
-                        }
+                        } else
+                            msg = "SD卡未找到！";
                     } catch (IOException e) {
                         e.printStackTrace();
+                        msg = e.getMessage();
                     } finally {
                         if (bos != null) {
                             try {
@@ -238,6 +241,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                 executorService = Executors.newSingleThreadExecutor();
             executorService.execute(thread);
         } else {
+            msg = "图片对象丢失！";
             Message message = myHandler.obtainMessage();
             message.what = BITMAP_FILE_REQUEST_CODE;
             myHandler.sendMessage(message);
