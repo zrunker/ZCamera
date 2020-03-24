@@ -143,7 +143,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     // 设置旋转动画
     private void startRotateAnim(int start, int end) {
         ObjectAnimator anim = ObjectAnimator.ofFloat(iv, "rotation", start, end);
-        anim.setDuration(1000);
+        anim.setDuration(900);
         anim.start();
         currentRotate = end % 360;
     }
