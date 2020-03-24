@@ -1,5 +1,5 @@
 # ZCamera
-自定义相机实现扫描银行卡界面
+自定义相机。1、实现扫描银行卡界面ScanBankCardActivity。2、自定义拍照旋转TakePictureActivity。3、图片旋转、手势放大RotatePictureActivity。
 
 ### 一、引入ZCamera：
 
@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.zrunker:ZCamera:v1.0.2'
+    implementation 'com.github.zrunker:ZCamera:v1.0.5'
 }
 ```
 
@@ -28,7 +28,7 @@ dependencies {
 	<dependency>
 	    <groupId>com.github.zrunker</groupId>
 	    <artifactId>ZCamera</artifactId>
-	    <version>v1.0.2</version>
+	    <version>v1.0.5</version>
 	</dependency>
 ```
 3. 直接下载工程文件：
@@ -40,6 +40,8 @@ dependencies {
 ```
 
 ### 二、使用（推荐）：
+
+#### 1.扫描银行卡ScanBankCardActivity
 在相应的Activity中添加如下代码：
 ```
 1. 跳转拍照扫描：
@@ -65,5 +67,22 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     }
 }
 ```
+
+#### 2.自定义拍照TakePictureActivity
+```
+Intent intent = new Intent(this, TakePictureActivity.class);
+startActivityForResult(intent, 112);
+```
+在onActivityResult中监听返回值，同上。
+
+#### 3.图片旋转处理RotatePictureActivity
+```
+Intent intent = new Intent(this, RotatePictureActivity.class);
+intent.setData(uri);
+startActivityForResult(intent, 113);
+```
+其中uri为图片信息，可以是bitmap\file等。
+在onActivityResult中监听返回值，同上。
+
 ### 最终效果图：
 ![扫描银行卡效果图](https://github.com/zrunker/ZCamera/blob/master/device-2019-12-05-103721.png)
