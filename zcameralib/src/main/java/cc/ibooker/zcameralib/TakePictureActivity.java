@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +37,11 @@ import java.util.concurrent.Executors;
 public class TakePictureActivity extends AppCompatActivity implements View.OnClickListener {
     private final int TAKE_PICTURE_REQUEST_CODE = 111;
     private final int BITMAP_FILE_REQUEST_CODE = 112;
+    private final int TO_ROTATEPICTURE_REQUEST_CODE = 113;
     private ZCameraView cameraView;
     private ImageView ivPreview, ivArrowDown, ivTakepic, ivRotate;
     private TextView tvComplete;
     private Bitmap bitmap;
-    private final int currentRotate = -90;
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
@@ -179,10 +181,10 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         if (i == R.id.iv_takepic) {// 拍照
             cameraView.takePicture();
         } else if (i == R.id.iv_rotate) {// 旋转
-            ivRotate.setEnabled(false);
-            rotateBitmap(currentRotate);
-            ivPreview.setImageBitmap(bitmap);
-            ivRotate.setEnabled(true);
+            Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+            Intent intent = new Intent(this, RotatePictureActivity.class);
+            intent.setData(uri);
+            startActivityForResult(intent, TO_ROTATEPICTURE_REQUEST_CODE);
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照
@@ -310,6 +312,23 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             } else {
                 // 重新渲染页面
                 recreate();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TO_ROTATEPICTURE_REQUEST_CODE) {
+                Intent intent = new Intent();
+                if (data != null) {
+                    intent.putExtra("filePath", data.getStringExtra("filePath"));
+                    intent.putExtra("message", data.getStringExtra("message"));
+                } else
+                    intent.putExtra("message", "发生未知异常！");
+                setResult(RESULT_OK, intent);
+                finish();
             }
         }
     }
