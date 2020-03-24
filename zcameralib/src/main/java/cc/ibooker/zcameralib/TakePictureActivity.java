@@ -42,6 +42,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     private ImageView ivPreview, ivArrowDown, ivTakepic, ivRotate;
     private TextView tvComplete;
     private Bitmap bitmap;
+    private Uri uri;
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
@@ -136,6 +137,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                             // 默认拍照之后图片为横屏 - 旋转90
                             rotateBitmap(cameraView.getCameraOrientation());
+                            // 生成Uri
+                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                             // 刷新界面
                             Message message = Message.obtain();
                             message.what = TAKE_PICTURE_REQUEST_CODE;
@@ -181,10 +184,13 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         if (i == R.id.iv_takepic) {// 拍照
             cameraView.takePicture();
         } else if (i == R.id.iv_rotate) {// 旋转
-            Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+            ivRotate.setEnabled(false);
+            if (uri == null)
+                uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
             Intent intent = new Intent(this, RotatePictureActivity.class);
             intent.setData(uri);
             startActivityForResult(intent, TO_ROTATEPICTURE_REQUEST_CODE);
+            ivRotate.setEnabled(true);
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照

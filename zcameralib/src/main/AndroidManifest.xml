@@ -19,16 +19,19 @@
         <activity
             android:name=".ScanBankCardActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
         <activity
             android:name=".TakePictureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
         <activity
             android:name=".RotatePictureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
     </application>
