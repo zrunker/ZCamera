@@ -188,7 +188,10 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         } else if (i == R.id.tv_complete) {// 完成
             bitmapToFile();
         } else if (i == R.id.iv_arrow_down) {// 重新拍照
-            recreate();
+            if (tvComplete.getVisibility() == View.VISIBLE)
+                recreate();
+            else
+                finish();
         }
     }
 
