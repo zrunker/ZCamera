@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.zrunker:ZCamera:v1.0.5'
+    implementation 'com.github.zrunker:ZCamera:v1.0.7'
 }
 ```
 
@@ -28,7 +28,7 @@ dependencies {
 	<dependency>
 	    <groupId>com.github.zrunker</groupId>
 	    <artifactId>ZCamera</artifactId>
-	    <version>v1.0.5</version>
+	    <version>v1.0.7</version>
 	</dependency>
 ```
 3. 直接下载工程文件：
