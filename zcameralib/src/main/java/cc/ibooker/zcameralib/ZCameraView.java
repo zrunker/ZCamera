@@ -95,7 +95,7 @@ public class ZCameraView extends SurfaceView
                 e.printStackTrace();
                 mCamera.release();
                 mCamera = null;
-                onError(-1, mCamera);
+                onError(-1, null);
             }
         }
     }
