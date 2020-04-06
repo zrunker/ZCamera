@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.zrunker:ZCamera:v1.0.7'
+    implementation 'com.github.zrunker:ZCamera:v1.0.9'
 }
 ```
 
@@ -28,7 +28,7 @@ dependencies {
 	<dependency>
 	    <groupId>com.github.zrunker</groupId>
 	    <artifactId>ZCamera</artifactId>
-	    <version>v1.0.7</version>
+	    <version>v1.0.9</version>
 	</dependency>
 ```
 3. 直接下载工程文件：
@@ -81,6 +81,29 @@ Intent intent = new Intent(this, RotatePictureActivity.class);
 intent.setData(uri);
 startActivityForResult(intent, 113);
 ```
+#### 4.进入身份证正面拍照
+```
+Intent intent = new Intent(this, IDCardFrontActivity.class);
+// 扫描裁剪框背景
+intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_cc000000_1_5_h_ffffff_1_c_5_a);
+// 主题
+intent.putExtra("title", "扫描身份证正面-测试");
+// 提示
+intent.putExtra("tip", "请将身份证正面照放入框内-测试");
+startActivityForResult(intent, 113);
+```
+#### 5.进入身份证反面拍照
+```
+Intent intent = new Intent(this, IDCardBackActivity.class);
+// 扫描裁剪框背景
+intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_cc000000_1_5_h_ffffff_1_c_5_a);
+// 主题
+intent.putExtra("title", "扫描身份证反面-测试");
+// 提示
+intent.putExtra("tip", "请将身份证反面照放入框内-测试");
+startActivityForResult(intent, 114);
+```
+
 其中uri为图片信息，可以是bitmap\file等。
 在onActivityResult中监听返回值，同上。
 
