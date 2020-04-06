@@ -125,4 +125,15 @@
         android:layout_marginBottom="45dp"
         android:contentDescription="@null"
         android:src="@drawable/zcamera_bg_layerl_s_ffffff_h_000000_c_30_2_a" />
+
+    <ImageView
+        android:id="@+id/iv_light"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="36dp"
+        android:contentDescription="@null"
+        android:src="@drawable/zcamera_icon_light_off" />
 </FrameLayout>

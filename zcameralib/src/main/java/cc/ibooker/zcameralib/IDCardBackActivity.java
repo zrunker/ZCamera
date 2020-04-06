@@ -54,6 +54,9 @@ public class IDCardBackActivity extends AppCompatActivity implements View.OnClic
     private String tip;
     // 页面背景颜色
     private int decorViewBgRes;
+    private ImageView ivLight;
+    // 是否开启闪光灯
+    private boolean openFlashLight = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +88,8 @@ public class IDCardBackActivity extends AppCompatActivity implements View.OnClic
 
     // 初始化控件
     private void initView() {
+        ivLight = findViewById(R.id.iv_light);
+        ivLight.setOnClickListener(this);
         RelativeLayout titleRl = findViewById(R.id.rl_title);
         titleRl.setBackgroundResource(decorViewBgRes);
         View topView = findViewById(R.id.view_top);
@@ -319,6 +324,15 @@ public class IDCardBackActivity extends AppCompatActivity implements View.OnClic
             zCameraView.takePicture();
         } else if (i == R.id.tv_tip) {// 重新聚焦
             zCameraView.executeTouchEvent();
+        } else if (i == R.id.iv_light) {// 闪光灯
+            if (openFlashLight) {
+                ivLight.setImageResource(R.drawable.zcamera_icon_light_off);
+                zCameraView.turnOffFlash();
+            } else {
+                ivLight.setImageResource(R.drawable.zcamera_icon_light_on);
+                zCameraView.turnOnFlash();
+            }
+            openFlashLight = !openFlashLight;
         }
     }
 
