@@ -37,7 +37,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     private ImageView iv;
     private Bitmap bitmap;
     private int currentRotate;
-    private TextView tvReset;
+    private TextView tvReset, tvEnsure;
     private MyHandler myHandler;
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
@@ -79,6 +79,9 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
         }
         // 初始化控件
         initView();
+
+        int tvEnsureBgRes = getIntent().getIntExtra("tvEnsureBgRes", R.drawable.zcamera_bg_s_f7df00_c_5_a);
+        tvEnsure.setBackgroundResource(tvEnsureBgRes);
     }
 
     @Override
@@ -106,7 +109,8 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.tv_cancel).setOnClickListener(this);
         tvReset = findViewById(R.id.tv_reset);
         tvReset.setOnClickListener(this);
-        findViewById(R.id.tv_ensure).setOnClickListener(this);
+        tvEnsure = findViewById(R.id.tv_ensure);
+        tvEnsure.setOnClickListener(this);
         findViewById(R.id.iv_rotate_left).setOnClickListener(this);
         findViewById(R.id.iv_rotate_right).setOnClickListener(this);
         iv = findViewById(R.id.iv);
