@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import cc.ibooker.zcameralib.IDCardBackActivity;
+import cc.ibooker.zcameralib.IDCardFrontActivity;
 import cc.ibooker.zcameralib.ScanBankCardActivity;
 import cc.ibooker.zcameralib.TakePictureActivity;
 
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public void onEnterScan(View view) {
         Intent intent = new Intent(this, ScanBankCardActivity.class);
         // 扫描裁剪框背景
-        intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_87000000_2_5_h_fa3a00_2_c_10_a);
+        intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_cc000000_2_5_h_fa3a00_2_c_10_a);
         // 主题
         intent.putExtra("title", "扫描银行卡正面");
         // 提示
@@ -46,5 +48,29 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    // 进入身份证反面拍照
+    public void onEnterIdCardBack(View view) {
+        Intent intent = new Intent(this, IDCardBackActivity.class);
+        // 扫描裁剪框背景
+        intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_cc000000_1_5_h_ffffff_1_c_5_a);
+        // 主题
+        intent.putExtra("title", "扫描身份证反面-测试");
+        // 提示
+        intent.putExtra("tip", "请将身份证反面照放入框内-测试");
+        startActivityForResult(intent, 114);
+    }
+
+    // 进入身份证正面拍照
+    public void onEnterIdCardFront(View view) {
+        Intent intent = new Intent(this, IDCardFrontActivity.class);
+        // 扫描裁剪框背景
+        intent.putExtra("scanCropBgRes", R.drawable.zcamera_bg_layerl_h_cc000000_1_5_h_ffffff_1_c_5_a);
+        // 主题
+        intent.putExtra("title", "扫描身份证正面-测试");
+        // 提示
+        intent.putExtra("tip", "请将身份证正面照放入框内-测试");
+        startActivityForResult(intent, 113);
     }
 }

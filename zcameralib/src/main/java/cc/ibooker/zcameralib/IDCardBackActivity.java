@@ -34,11 +34,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 扫描银行卡Activity
+ * 身份证反面照
  *
  * @author 邹峰立
  */
-public class ScanBankCardActivity extends AppCompatActivity implements View.OnClickListener {
+public class IDCardBackActivity extends AppCompatActivity implements View.OnClickListener {
     private final int ONJPEGPICTURETAKEN_CODE = 1111;
     private ZCameraView zCameraView;
     private FrameLayout cameraScanCropFl;
@@ -58,7 +58,7 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.zcamera_activity_scan_bankcard);
+        setContentView(R.layout.zcamera_activity_idcard_back);
 
         decorViewBgRes = getIntent().getIntExtra("decorViewBgRes", R.color.zcamera_cc000000);
         scanCropBgRes = getIntent().getIntExtra("scanCropBgRes", 0);
@@ -127,12 +127,12 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             public void onJpegPictureTaken(final byte[] data, Camera camera) {
                 if (data != null) {
                     if (progressDialog == null) {
-                        progressDialog = new ProgressDialog(ScanBankCardActivity.this);
+                        progressDialog = new ProgressDialog(IDCardBackActivity.this);
                         progressDialog.setMessage("图片处理中...");
                         progressDialog.show();
                     }
                     if (myHandler == null)
-                        myHandler = new MyHandler(ScanBankCardActivity.this);
+                        myHandler = new MyHandler(IDCardBackActivity.this);
                     // 将字节流写成文件 - 推荐 - 子线程
                     Thread thread = new Thread(new Runnable() {
                         @Override
@@ -324,16 +324,16 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
 
     // 自定义Handler
     private static class MyHandler extends Handler {
-        private WeakReference<ScanBankCardActivity> mWeakRef;
+        private WeakReference<IDCardBackActivity> mWeakRef;
 
-        MyHandler(ScanBankCardActivity activity) {
+        MyHandler(IDCardBackActivity activity) {
             mWeakRef = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ScanBankCardActivity currentActivity = mWeakRef.get();
+            IDCardBackActivity currentActivity = mWeakRef.get();
             if (msg.what == currentActivity.ONJPEGPICTURETAKEN_CODE) {
                 String filePath = (String) msg.obj;
                 Intent intent = new Intent();

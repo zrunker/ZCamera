@@ -34,5 +34,17 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
+        <activity
+            android:name=".IDCardFrontActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeFullscreen" />
+        <activity
+            android:name=".IDCardBackActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeFullscreen" />
     </application>
 </manifest>

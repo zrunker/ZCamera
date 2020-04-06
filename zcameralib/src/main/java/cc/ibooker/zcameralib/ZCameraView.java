@@ -322,23 +322,30 @@ public class ZCameraView extends SurfaceView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (!isFoucing) {
-                isFoucing = true;
-                if (mCamera != null) {
-                    if (params == null)
-                        params = mCamera.getParameters();
-                    if (!params.getFocusMode().equals(Camera.Parameters.FOCUS_MODE_AUTO)) {
-                        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                        mCamera.setParameters(params);
-                    }
-                    // 开始预览
-                    mCamera.startPreview();
-                    // 自动对焦
-                    mCamera.autoFocus(this);
-                }
-            }
+            executeTouchEvent();
         }
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * 执行触摸事件
+     */
+    public void executeTouchEvent() {
+        if (!isFoucing) {
+            isFoucing = true;
+            if (mCamera != null) {
+                if (params == null)
+                    params = mCamera.getParameters();
+                if (!params.getFocusMode().equals(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                    mCamera.setParameters(params);
+                }
+                // 开始预览
+                mCamera.startPreview();
+                // 自动对焦
+                mCamera.autoFocus(this);
+            }
+        }
     }
 
     // 监听焦点事件

@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="扫描银行卡正面"
+                android:text="扫描身份证正面"
                 android:textColor="#FFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -65,7 +65,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="213dp"
+                android:layout_height="215dp"
                 android:orientation="horizontal">
 
                 <View
@@ -81,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/zcamera_bg_layerl_h_cc000000_2_5_h_fa3a00_2_c_10_a" />
+                    android:background="@drawable/zcamera_bg_layerl_h_cc000000_1_5_h_ffffff_1_c_5_a" />
 
                 <View
                     android:id="@+id/view_right"
@@ -90,6 +90,17 @@
                     android:layout_gravity="end"
                     android:background="@color/zcamera_cc000000" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="115dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginEnd="33dp"
+                    android:layout_marginRight="33dp"
+                    android:layout_marginBottom="63dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/zcamera_icon_id_card_locator_front" />
             </FrameLayout>
 
             <TextView
@@ -99,7 +110,7 @@
                 android:background="@color/zcamera_cc000000"
                 android:gravity="center_horizontal"
                 android:paddingTop="20dp"
-                android:text="将银行卡卡号面放在此区域，扫描卡片"
+                android:text="请将身份证正面照放入框内"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
         </LinearLayout>
