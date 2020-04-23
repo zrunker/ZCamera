@@ -267,7 +267,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             if (bool) {
                                 bos = new BufferedOutputStream(new FileOutputStream(file));
                                 // 将图片压缩到流中
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                                if (!bitmap.isRecycled())
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                             }
                         } else
                             msg = "SD卡未找到！";

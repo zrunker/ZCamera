@@ -113,13 +113,20 @@ public class ZCameraView extends SurfaceView
     // 布局销毁
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mCamera.autoFocus(null);
-        // 停止预览
-        mCamera.stopPreview();
-        // 回收相机
-        mCamera.release();
-        mCamera = null;
-        mHolder = null;
+        if (mCamera != null) {
+            try {
+                mCamera.cancelAutoFocus();
+                mCamera.autoFocus(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // 停止预览
+            mCamera.stopPreview();
+            // 回收相机
+            mCamera.release();
+            mCamera = null;
+            mHolder = null;
+        }
     }
 
     // 设置相机属性
