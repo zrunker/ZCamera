@@ -84,6 +84,8 @@ public class IDCardFrontActivity extends AppCompatActivity implements View.OnCli
             myHandler.removeCallbacks(null);
             myHandler = null;
         }
+        if (zCameraView != null)
+            zCameraView.destory();
     }
 
     // 初始化控件
