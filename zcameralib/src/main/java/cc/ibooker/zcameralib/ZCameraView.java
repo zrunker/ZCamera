@@ -129,6 +129,15 @@ public class ZCameraView extends SurfaceView
         }
     }
 
+    // 手动销毁
+    public void destory() {
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
     // 设置相机属性
     private void setCameraParams() {
         if (mCamera != null) {

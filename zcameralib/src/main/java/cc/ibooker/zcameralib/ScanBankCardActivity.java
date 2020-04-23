@@ -84,6 +84,8 @@ public class ScanBankCardActivity extends AppCompatActivity implements View.OnCl
             myHandler.removeCallbacks(null);
             myHandler = null;
         }
+        if (zCameraView != null)
+            zCameraView.destory();
     }
 
     // 初始化控件

@@ -103,6 +103,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             bitmap = null;
             System.gc();
         }
+        if (cameraView != null)
+            cameraView.destory();
     }
 
     // 初始化View
