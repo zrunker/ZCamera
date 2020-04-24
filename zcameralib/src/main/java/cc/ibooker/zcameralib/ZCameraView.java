@@ -330,6 +330,12 @@ public class ZCameraView extends SurfaceView
     private Camera.PictureCallback jpeg = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
+            if (mCamera != null)
+                try {
+                    mCamera.startPreview();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             if (cameraTakePicListener != null)
                 cameraTakePicListener.onJpegPictureTaken(data, camera);
         }

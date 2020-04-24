@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onEnterCamera(View view) {
         Intent intent = new Intent(this, TakePictureActivity.class);
-        startActivityForResult(intent, 112);
+        startActivityForResult(intent, 111);
     }
 
     @Override
@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 111 && data != null) {
-                String filePath = data.getStringExtra("filePath");
-                Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
-            } else if (requestCode == 112 && data != null) {
                 String filePath = data.getStringExtra("filePath");
                 Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
             }
@@ -59,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("title", "扫描身份证反面-测试");
         // 提示
         intent.putExtra("tip", "请将身份证反面照放入框内-测试");
-        startActivityForResult(intent, 114);
+        startActivityForResult(intent, 111);
     }
 
     // 进入身份证正面拍照
@@ -71,6 +68,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("title", "扫描身份证正面-测试");
         // 提示
         intent.putExtra("tip", "请将身份证正面照放入框内-测试");
-        startActivityForResult(intent, 113);
+        startActivityForResult(intent, 111);
     }
 }

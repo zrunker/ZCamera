@@ -142,17 +142,19 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             // 生成Uri
                             uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                             // 刷新界面
-                            Message message = Message.obtain();
-                            message.what = TAKE_PICTURE_REQUEST_CODE;
-                            myHandler.sendMessage(message);
+                            if (myHandler != null) {
+                                Message message = Message.obtain();
+                                message.what = TAKE_PICTURE_REQUEST_CODE;
+                                myHandler.sendMessage(message);
+                            }
                         }
                     });
-                    if (executorService == null)
+                    if (executorService == null || executorService.isShutdown())
                         executorService = Executors.newSingleThreadExecutor();
                     executorService.execute(thread);
                 } else {
                     msg = "拍照失败！";
-                    Message message = myHandler.obtainMessage();
+                    Message message = Message.obtain();
                     message.what = BITMAP_FILE_REQUEST_CODE;
                     myHandler.sendMessage(message);
                 }
@@ -296,19 +298,21 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             bitmap.recycle();// 回收bitmap空间
                     }
                     // 切换主线程
-                    Message message = myHandler.obtainMessage();
-                    message.what = BITMAP_FILE_REQUEST_CODE;
-                    if (file != null && file.exists())
-                        message.obj = file.getAbsolutePath();
-                    myHandler.sendMessage(message);
+                    if (myHandler != null) {
+                        Message message = Message.obtain();
+                        message.what = BITMAP_FILE_REQUEST_CODE;
+                        if (file != null && file.exists())
+                            message.obj = file.getAbsolutePath();
+                        myHandler.sendMessage(message);
+                    }
                 }
             });
-            if (executorService == null)
+            if (executorService == null || executorService.isShutdown())
                 executorService = Executors.newSingleThreadExecutor();
             executorService.execute(thread);
         } else {
             msg = "图片对象丢失！";
-            Message message = myHandler.obtainMessage();
+            Message message = Message.obtain();
             message.what = BITMAP_FILE_REQUEST_CODE;
             myHandler.sendMessage(message);
         }

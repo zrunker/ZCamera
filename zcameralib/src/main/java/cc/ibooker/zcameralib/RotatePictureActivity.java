@@ -235,11 +235,13 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                             bitmap.recycle();// 回收bitmap空间
                     }
                     // 切换主线程
-                    Message message = myHandler.obtainMessage();
-                    message.what = BITMAP_FILE_REQUEST_CODE;
-                    if (file != null && file.exists())
-                        message.obj = file.getAbsolutePath();
-                    myHandler.sendMessage(message);
+                    if (myHandler != null) {
+                        Message message = Message.obtain();
+                        message.what = BITMAP_FILE_REQUEST_CODE;
+                        if (file != null && file.exists())
+                            message.obj = file.getAbsolutePath();
+                        myHandler.sendMessage(message);
+                    }
                 }
             });
             if (executorService == null)
@@ -247,7 +249,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             executorService.execute(thread);
         } else {
             msg = "图片对象丢失！";
-            Message message = myHandler.obtainMessage();
+            Message message = Message.obtain();
             message.what = BITMAP_FILE_REQUEST_CODE;
             myHandler.sendMessage(message);
         }

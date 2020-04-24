@@ -210,11 +210,13 @@ public class IDCardFrontActivity extends AppCompatActivity implements View.OnCli
                                     bitmap.recycle();// 回收bitmap空间
                             }
                             // 切换主线程
-                            Message message = myHandler.obtainMessage();
-                            message.what = ONJPEGPICTURETAKEN_CODE;
-                            if (file != null && file.exists())
-                                message.obj = file.getAbsolutePath();
-                            myHandler.sendMessage(message);
+                            if (myHandler != null) {
+                                Message message = Message.obtain();
+                                message.what = ONJPEGPICTURETAKEN_CODE;
+                                if (file != null && file.exists())
+                                    message.obj = file.getAbsolutePath();
+                                myHandler.sendMessage(message);
+                            }
                         }
                     });
                     if (executorService == null)
