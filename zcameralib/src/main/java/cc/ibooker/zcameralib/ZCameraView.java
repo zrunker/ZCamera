@@ -330,14 +330,15 @@ public class ZCameraView extends SurfaceView
     private Camera.PictureCallback jpeg = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
+            if (cameraTakePicListener != null)
+                cameraTakePicListener.onJpegPictureTaken(data, camera);
+            // 拍照成功之后进行重新预览
             if (mCamera != null)
                 try {
                     mCamera.startPreview();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            if (cameraTakePicListener != null)
-                cameraTakePicListener.onJpegPictureTaken(data, camera);
         }
     };
 
@@ -359,8 +360,12 @@ public class ZCameraView extends SurfaceView
                 if (params == null)
                     params = mCamera.getParameters();
                 if (!params.getFocusMode().equals(Camera.Parameters.FOCUS_MODE_AUTO)) {
-                    params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                    mCamera.setParameters(params);
+                    try {
+                        params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                        mCamera.setParameters(params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 // 开始预览
                 mCamera.startPreview();

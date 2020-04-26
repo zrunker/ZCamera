@@ -44,7 +44,7 @@ public class IDCardBackActivity extends AppCompatActivity implements View.OnClic
     private FrameLayout cameraScanCropFl;
     private LinearLayout cameraScanContainerLl;
     private ExecutorService executorService;
-    private MyHandler myHandler;
+    private MyHandler myHandler = new MyHandler(this);
     private ProgressDialog progressDialog;
     // 扫描裁剪框背景
     private int scanCropBgRes;

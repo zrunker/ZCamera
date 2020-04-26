@@ -43,7 +43,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     private TextView tvComplete;
     private Bitmap bitmap;
     private Uri uri;
-    private MyHandler myHandler;
+    private MyHandler myHandler = new MyHandler(this);
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
     private String msg = "success";

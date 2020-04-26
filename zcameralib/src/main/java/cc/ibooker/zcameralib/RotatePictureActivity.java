@@ -38,7 +38,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     private Bitmap bitmap;
     private int currentRotate;
     private TextView tvReset, tvEnsure;
-    private MyHandler myHandler;
+    private MyHandler myHandler = new MyHandler(this);
     private ProgressDialog progressDialog;
     private ExecutorService executorService;
     private String msg = "success";
