@@ -230,8 +230,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             // 旋转后的图片
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
             try {
-                // 压缩图片 - 图片不能超过6M
-                bitmap = BitmapUtil.compressBitmapByQuality(bitmap, 6 * 1024);
+                // 压缩图片 - 图片不能超过8M
+                bitmap = BitmapUtil.compressBitmapByQuality(bitmap, 8 * 1024);
             } catch (Exception e) {
                 e.printStackTrace();
             }
