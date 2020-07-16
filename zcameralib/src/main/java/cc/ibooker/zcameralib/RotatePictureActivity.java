@@ -27,6 +27,8 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import cc.ibooker.zbitmaplib.BitmapUtil;
+
 /**
  * 旋转图片
  *
@@ -162,8 +164,8 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             // 旋转后的图片
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
             try {
-                // 压缩图片 - 图片不能超过7M
-                bitmap = BitmapUtil.compressImageByQuality(bitmap, 7 * 1024);
+                // 压缩图片 - 图片不能超过6M
+                bitmap = BitmapUtil.compressBitmapByQuality(bitmap, 6 * 1024);
             } catch (Exception e) {
                 e.printStackTrace();
             }

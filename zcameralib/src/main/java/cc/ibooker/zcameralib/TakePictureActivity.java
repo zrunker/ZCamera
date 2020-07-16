@@ -29,6 +29,8 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import cc.ibooker.zbitmaplib.BitmapUtil;
+
 /**
  * 自定义拍照功能
  *
@@ -140,7 +142,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             // 默认拍照之后图片为横屏 - 旋转90
                             rotateBitmap(cameraView.getCameraOrientation());
                             // 生成Uri
-                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "img" + System.currentTimeMillis(), null));
                             // 刷新界面
                             if (myHandler != null) {
                                 Message message = Message.obtain();
@@ -190,7 +192,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
         } else if (i == R.id.iv_rotate) {// 旋转
             ivRotate.setEnabled(false);
             if (uri == null)
-                uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "img" + System.currentTimeMillis(), null));
             Intent intent = new Intent(this, RotatePictureActivity.class);
             intent.setData(uri);
             startActivityForResult(intent, TO_ROTATEPICTURE_REQUEST_CODE);
@@ -228,8 +230,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             // 旋转后的图片
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
             try {
-                // 压缩图片 - 图片不能超过7M
-                bitmap = BitmapUtil.compressImageByQuality(bitmap, 7 * 1024);
+                // 压缩图片 - 图片不能超过6M
+                bitmap = BitmapUtil.compressBitmapByQuality(bitmap, 6 * 1024);
             } catch (Exception e) {
                 e.printStackTrace();
             }
