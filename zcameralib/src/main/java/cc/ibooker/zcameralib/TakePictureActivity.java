@@ -141,13 +141,15 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                             // 默认拍照之后图片为横屏 - 旋转90
                             rotateBitmap(cameraView.getCameraOrientation());
-                            // 生成Uri
-                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "img" + System.currentTimeMillis(), null));
-                            // 刷新界面
-                            if (myHandler != null) {
-                                Message message = Message.obtain();
-                                message.what = TAKE_PICTURE_REQUEST_CODE;
-                                myHandler.sendMessage(message);
+                            if (bitmap != null) {
+                                // 生成Uri
+                                uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "img" + System.currentTimeMillis(), null));
+                                // 刷新界面
+                                if (myHandler != null) {
+                                    Message message = Message.obtain();
+                                    message.what = TAKE_PICTURE_REQUEST_CODE;
+                                    myHandler.sendMessage(message);
+                                }
                             }
                         }
                     });
