@@ -101,11 +101,11 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             myHandler.removeCallbacks(null);
             myHandler = null;
         }
-        if (bitmap != null) {
-            bitmap.recycle();
-            bitmap = null;
-            System.gc();
-        }
+//        if (bitmap != null) {
+//            bitmap.recycle();
+//            bitmap = null;
+//            System.gc();
+//        }
     }
 
     // 初始化控件

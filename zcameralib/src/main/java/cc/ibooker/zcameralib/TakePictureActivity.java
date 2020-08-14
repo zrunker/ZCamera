@@ -100,11 +100,11 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             myHandler.removeCallbacks(null);
             myHandler = null;
         }
-        if (bitmap != null) {
-            bitmap.recycle();
-            bitmap = null;
-            System.gc();
-        }
+//        if (bitmap != null) {
+//            bitmap.recycle();
+//            bitmap = null;
+//            System.gc();
+//        }
         if (cameraView != null)
             cameraView.destory();
     }
