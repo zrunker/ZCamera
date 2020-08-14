@@ -250,6 +250,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             if (progressDialog == null) {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage("生成文件中...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
                 progressDialog.show();
             }
             // 将字节流写成文件 - 推荐 - 子线程

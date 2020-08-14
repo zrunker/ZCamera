@@ -167,6 +167,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
             try {
                 // 压缩图片 - 图片不能超过8M
+                Toast.makeText(RotatePictureActivity.this, "图片压缩中...", Toast.LENGTH_SHORT).show();
                 bitmap = BitmapUtil.compressBitmapByQuality(bitmap, 8 * 1024);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -182,6 +183,8 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             if (progressDialog == null) {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage("生成文件中...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setCancelable(false);
                 progressDialog.show();
             }
             // 将字节流写成文件 - 推荐 - 子线程
@@ -203,7 +206,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                             if (!bool)
                                 bool = targetFile.mkdirs();
                             if (bool) {
-                                String filePath = targetSDPath + System.currentTimeMillis() + ".JPEG";
+                                String filePath = targetSDPath + System.currentTimeMillis() + ".jpg";
                                 file = new File(filePath);
                                 bool = file.exists();
                                 if (!bool)
