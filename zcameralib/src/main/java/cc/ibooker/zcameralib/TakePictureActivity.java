@@ -91,7 +91,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     protected void onDestroy() {
         super.onDestroy();
         if (progressDialog != null)
-            progressDialog.cancel();
+            progressDialog.dismiss();
         if (executorService != null) {
             executorService.shutdownNow();
             executorService = null;
@@ -132,6 +132,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                     if (progressDialog == null) {
                         progressDialog = new ProgressDialog(TakePictureActivity.this);
                         progressDialog.setMessage("图片处理中...");
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.setCancelable(false);
                         progressDialog.show();
                     }
                     // 开启线程进行处理
