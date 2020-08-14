@@ -43,7 +43,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     private ZCameraView cameraView;
     private ImageView ivPreview, ivArrowDown, ivTakepic, ivRotate;
     private TextView tvComplete;
-    private Bitmap bitmap;
+    private volatile Bitmap bitmap;
     private Uri uri;
     private MyHandler myHandler = new MyHandler(this);
     private ProgressDialog progressDialog;
@@ -65,7 +65,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
             if (msg.what == currentActivity.TAKE_PICTURE_REQUEST_CODE) {
                 // 关闭进度条
                 if (currentActivity.progressDialog != null)
-                    currentActivity.progressDialog.cancel();
+                    currentActivity.progressDialog.dismiss();
                 // 刷新界面
                 currentActivity.takePicAfter();
             } else if (msg.what == currentActivity.BITMAP_FILE_REQUEST_CODE) {
@@ -150,6 +150,8 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                                     message.what = TAKE_PICTURE_REQUEST_CODE;
                                     myHandler.sendMessage(message);
                                 }
+                            } else {
+                                msg = "图片解析失败！";
                             }
                         }
                     });
@@ -166,7 +168,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onError(int error, Camera camera) {
-
+                Toast.makeText(TakePictureActivity.this, "拍照出错" + error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -223,7 +225,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     }
 
     // 旋转Bitmap
-    private void rotateBitmap(int rotate) {
+    private synchronized void rotateBitmap(int rotate) {
         if (bitmap != null) {
             Matrix matrix = new Matrix();
             int height = bitmap.getHeight();
@@ -241,7 +243,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
     }
 
     // bitmap转File文件
-    public void bitmapToFile() {
+    public synchronized void bitmapToFile() {
         if (myHandler == null)
             myHandler = new MyHandler(this);
         if (bitmap != null) {
@@ -266,7 +268,7 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             if (!bool)
                                 bool = targetFile.mkdirs();
                             if (bool) {
-                                String filePath = targetSDPath + System.currentTimeMillis() + ".JPEG";
+                                String filePath = targetSDPath + System.currentTimeMillis() + ".jpg";
                                 file = new File(filePath);
                                 bool = file.exists();
                                 if (!bool)
@@ -275,8 +277,12 @@ public class TakePictureActivity extends AppCompatActivity implements View.OnCli
                             if (bool) {
                                 bos = new BufferedOutputStream(new FileOutputStream(file));
                                 // 将图片压缩到流中
-                                if (!bitmap.isRecycled())
+                                if (bitmap != null && !bitmap.isRecycled())
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                                else
+                                    msg = "图片文件丢失！";
+                            } else {
+                                msg = "图片文件创建失败！";
                             }
                         } else
                             msg = "SD卡未找到！";

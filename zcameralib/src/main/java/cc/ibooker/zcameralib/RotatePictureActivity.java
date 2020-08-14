@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -37,7 +38,7 @@ import cc.ibooker.zbitmaplib.BitmapUtil;
 public class RotatePictureActivity extends AppCompatActivity implements View.OnClickListener {
     private final int BITMAP_FILE_REQUEST_CODE = 112;
     private ImageView iv;
-    private Bitmap bitmap;
+    private volatile Bitmap bitmap;
     private int currentRotate;
     private TextView tvReset, tvEnsure;
     private MyHandler myHandler = new MyHandler(this);
@@ -78,6 +79,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this, "图片信息获取失败！", Toast.LENGTH_SHORT).show();
         }
         // 初始化控件
         initView();
@@ -90,7 +92,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     protected void onDestroy() {
         super.onDestroy();
         if (progressDialog != null)
-            progressDialog.cancel();
+            progressDialog.dismiss();
         if (executorService != null) {
             executorService.shutdownNow();
             executorService = null;
@@ -155,7 +157,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     }
 
     // 旋转Bitmap
-    private void rotateBitmap(int rotate) {
+    private synchronized void rotateBitmap(int rotate) {
         if (bitmap != null) {
             Matrix matrix = new Matrix();
             int height = bitmap.getHeight();
@@ -173,7 +175,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
     }
 
     // bitmap转File文件
-    public void bitmapToFile() {
+    public synchronized void bitmapToFile() {
         if (myHandler == null)
             myHandler = new MyHandler(this);
         if (bitmap != null) {
@@ -212,6 +214,8 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
                                 // 将图片压缩到流中
                                 if (bitmap != null && !bitmap.isRecycled())
                                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                            } else {
+                                msg = "文件创建失败！";
                             }
                         } else
                             msg = "SD卡未找到！";
