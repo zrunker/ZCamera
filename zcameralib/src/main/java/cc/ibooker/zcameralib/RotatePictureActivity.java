@@ -158,7 +158,7 @@ public class RotatePictureActivity extends AppCompatActivity implements View.OnC
 
     // 旋转Bitmap
     private synchronized void rotateBitmap(int rotate) {
-        if (bitmap != null) {
+        if (bitmap != null && rotate != 0) {
             Matrix matrix = new Matrix();
             int height = bitmap.getHeight();
             int width = bitmap.getWidth();
